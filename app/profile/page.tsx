@@ -333,25 +333,88 @@ export default function MyProfilePage() {
                 </div>
               </div>
 
-              {/* Achievements & Certifications */}
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                  Academic Achievements & Badges
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80 flex items-center gap-3">
-                    <Award className="w-6 h-6 text-amber-600 shrink-0" />
-                    <div>
-                      <p className="font-bold text-slate-900">Karnataka Hackathon 2024 Finalist</p>
-                      <p className="text-[11px] text-slate-500">Issued by VTU Center for Innovation</p>
-                    </div>
+              {/* Achievements & Reputation System (Matching Blueprint Sheet 2 Screen 11) */}
+              <div className="pt-2 border-t border-slate-100 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    My Achievements & Reputation
+                  </h3>
+                  <span className="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
+                    Karnataka Innovation Network Rank
+                  </span>
+                </div>
+
+                {/* Reputation Stats Strip */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-4 bg-gradient-to-br from-indigo-50 to-indigo-100/50 rounded-2xl border border-indigo-200">
+                    <span className="text-[10px] font-bold text-indigo-900 uppercase tracking-wider">Innovation Rank</span>
+                    <p className="text-xl font-black text-indigo-700 mt-0.5">Top 5%</p>
+                    <span className="text-[10px] text-indigo-600">State-level percentile</span>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-indigo-50/60 border border-indigo-200/80 flex items-center gap-3">
-                    <Sparkles className="w-6 h-6 text-indigo-600 shrink-0" />
-                    <div>
-                      <p className="font-bold text-slate-900">CampusConnect Verified Contributor</p>
-                      <p className="text-[11px] text-slate-500">Peer verified notes & code syndication</p>
+
+                  <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-2xl border border-purple-200">
+                    <span className="text-[10px] font-bold text-purple-900 uppercase tracking-wider">Karma Points</span>
+                    <p className="text-xl font-black text-purple-700 mt-0.5">4,350</p>
+                    <span className="text-[10px] text-purple-600">+500 this month</span>
+                  </div>
+
+                  <div className="p-4 bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-2xl border border-amber-200">
+                    <span className="text-[10px] font-bold text-amber-900 uppercase tracking-wider">Earned Badges</span>
+                    <div className="flex items-center gap-1 mt-1 text-lg">
+                      <span title="Hackathon Winner">🏆</span>
+                      <span title="Peer Tutor">🎓</span>
+                      <span title="Open Source Contributor">🚀</span>
+                      <span title="Verified Innovator">🛡️</span>
                     </div>
+                    <span className="text-[10px] text-amber-700">4 Verified Badges</span>
+                  </div>
+
+                  <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-2xl border border-emerald-200">
+                    <span className="text-[10px] font-bold text-emerald-950 uppercase tracking-wider">Reputation Score</span>
+                    <p className="text-xl font-black text-emerald-700 mt-0.5">4.8 / 5</p>
+                    <span className="text-[10px] text-emerald-600">Based on projects & events</span>
+                  </div>
+                </div>
+
+                {/* Achievements List */}
+                <div className="space-y-2.5">
+                  <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-3">
+                      <Award className="w-5 h-5 text-amber-600 shrink-0" />
+                      <div>
+                        <p className="font-bold text-slate-900">Winner - VVCE Hackathon 2025</p>
+                        <p className="text-[11px] text-slate-500">Issued by Vidyavardhaka Innovation & Incubation Cell</p>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 font-extrabold text-[11px]">
+                      +1,000 pts
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-indigo-50/60 border border-indigo-200 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-3">
+                      <FolderGit2 className="w-5 h-5 text-indigo-600 shrink-0" />
+                      <div>
+                        <p className="font-bold text-slate-900">Completed 3 Collaborative Projects</p>
+                        <p className="text-[11px] text-slate-500">AI-based Waste Sorting & KrishiMitra AI</p>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-900 font-extrabold text-[11px]">
+                      +500 pts
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-3">
+                      <Sparkles className="w-5 h-5 text-emerald-600 shrink-0" />
+                      <div>
+                        <p className="font-bold text-slate-900">Peer Tutoring & Notes Syndication Contributor</p>
+                        <p className="text-[11px] text-slate-500">Shared VTU notes with 1,400+ junior student downloads</p>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 font-extrabold text-[11px]">
+                      +750 pts
+                    </span>
                   </div>
                 </div>
               </div>

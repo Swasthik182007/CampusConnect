@@ -7,7 +7,7 @@ import { dataStore } from "@/lib/data-store";
 interface ReportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  targetType: "listing" | "user" | "message" | "post" | "community";
+  targetType: "listing" | "user" | "message" | "post" | "community" | "project";
   targetId: string;
   targetTitle?: string;
 }

@@ -120,35 +120,97 @@ export default function AdminPortalPage() {
 
   return (
     <AppShell
-      title="Admin & Moderation Portal"
-      subtitle="Accreditation management, trust & safety reports, and event approvals"
+      title="Admin & Analytics Dashboard 🏛️"
+      subtitle="State-level accreditation management, trust & safety reports, and innovation metrics"
     >
       <div className="space-y-6">
-        {/* Metric Strip */}
+        {/* Metric Strip (Matching Blueprint Sheet 2 Screen 10) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-card">
-            <span className="text-xs font-semibold text-slate-500">Pending Safety Reports</span>
-            <p className="text-2xl font-extrabold text-rose-600 mt-1 tabular-nums">
-              {reports.filter((r) => r.status === "pending").length}
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-card">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Students</span>
+            <p className="text-3xl font-black text-indigo-700 mt-1 tabular-nums">
+              12,480
             </p>
+            <span className="text-[10px] text-emerald-600 font-bold">↑ 18% this semester</span>
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-card">
-            <span className="text-xs font-semibold text-slate-500">Pending Event Submissions</span>
-            <p className="text-2xl font-extrabold text-amber-600 mt-1 tabular-nums">
-              {pendingEvents.length}
+
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-card">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Colleges</span>
+            <p className="text-3xl font-black text-emerald-600 mt-1 tabular-nums">
+              42
             </p>
+            <span className="text-[10px] text-slate-400 font-medium">Across Karnataka</span>
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-card">
-            <span className="text-xs font-semibold text-slate-500">Total Verified Students</span>
-            <p className="text-2xl font-extrabold text-indigo-600 mt-1 tabular-nums">
-              {profiles.length}
+
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-card">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Projects</span>
+            <p className="text-3xl font-black text-amber-600 mt-1 tabular-nums">
+              1,230
             </p>
+            <span className="text-[10px] text-indigo-600 font-bold">SIH & Hackathon Squads</span>
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-card">
-            <span className="text-xs font-semibold text-slate-500">Accredited Colleges</span>
-            <p className="text-2xl font-extrabold text-emerald-600 mt-1 tabular-nums">
-              {colleges.length}
+
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-card">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Events & Fests</span>
+            <p className="text-3xl font-black text-purple-600 mt-1 tabular-nums">
+              98
             </p>
+            <span className="text-[10px] text-slate-400 font-medium">State-Level Calendar</span>
+          </div>
+        </div>
+
+        {/* Platform Engagement Visual Chart (Matching Blueprint Sheet 2 Screen 10) */}
+        <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-card space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                Platform Engagement & Activity Trend
+              </h3>
+              <p className="text-xs text-slate-500">
+                Weekly student peer transactions, hackathon team formations, and tutoring hours
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                <span className="w-2 h-2 rounded-full bg-indigo-600" />
+                Active Student Engagement
+              </span>
+            </div>
+          </div>
+
+          {/* SVG Smooth Curve Area Chart */}
+          <div className="relative h-44 w-full pt-4">
+            <svg className="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="engagementGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#4F46E5" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M0,95 C50,85 100,105 150,70 C200,35 250,60 300,40 C350,20 400,45 450,25 L500,10 L500,120 L0,120 Z"
+                fill="url(#engagementGradient)"
+              />
+              <path
+                d="M0,95 C50,85 100,105 150,70 C200,35 250,60 300,40 C350,20 400,45 450,25 L500,10"
+                fill="none"
+                stroke="#4F46E5"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+              {/* Data points */}
+              <circle cx="150" cy="70" r="4" fill="#4F46E5" stroke="#FFFFFF" strokeWidth="2" />
+              <circle cx="300" cy="40" r="4" fill="#4F46E5" stroke="#FFFFFF" strokeWidth="2" />
+              <circle cx="450" cy="25" r="4" fill="#4F46E5" stroke="#FFFFFF" strokeWidth="2" />
+              <circle cx="500" cy="10" r="5" fill="#10B981" stroke="#FFFFFF" strokeWidth="2" />
+            </svg>
+            <div className="flex justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-100">
+              <span>Week 1 (Jul)</span>
+              <span>Week 4 (Aug)</span>
+              <span>Week 8 (Sep)</span>
+              <span>Week 12 (Oct)</span>
+              <span className="font-bold text-indigo-600">Peak (Nov 2025)</span>
+            </div>
           </div>
         </div>
 

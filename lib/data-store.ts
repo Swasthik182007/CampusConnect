@@ -1139,7 +1139,7 @@ class DataStore {
   }
 
   public createReport(data: {
-    target_type: "listing" | "user" | "message" | "post" | "community";
+    target_type: "listing" | "user" | "message" | "post" | "community" | "project";
     target_id: string;
     target_title?: string;
     reason: string;

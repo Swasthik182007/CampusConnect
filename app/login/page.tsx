@@ -217,6 +217,82 @@ function LoginForm() {
             </p>
           </div>
 
+          {/* Quick 1-Click Demo Profiles Bar */}
+          <div className="mb-5 p-3.5 bg-gradient-to-r from-indigo-50/80 to-purple-50/80 border border-indigo-100 rounded-2xl shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold text-indigo-950 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                1-Click Demo Profiles (Team Code Quest)
+              </span>
+              <span className="text-[10px] text-indigo-600 font-semibold">Click to autofill</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  handleRoleSwitch("student");
+                  setEmail("teju.b@vvce.ac.in");
+                  setPassword("DemoStudent@2025");
+                }}
+                className="p-2 rounded-xl bg-white border border-indigo-200 text-left hover:border-indigo-500 hover:shadow-sm transition-all cursor-pointer group"
+              >
+                <p className="text-[11px] font-bold text-slate-900 group-hover:text-indigo-600 flex items-center justify-between">
+                  <span>Teju B.M.</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-600 font-bold">Student</span>
+                </p>
+                <p className="text-[10px] text-slate-500 truncate">VVCE • CSE Year 1</p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleRoleSwitch("student");
+                  setEmail("swarna.n@vvce.ac.in");
+                  setPassword("DemoTutor@2025");
+                }}
+                className="p-2 rounded-xl bg-white border border-indigo-200 text-left hover:border-indigo-500 hover:shadow-sm transition-all cursor-pointer group"
+              >
+                <p className="text-[11px] font-bold text-slate-900 group-hover:text-indigo-600 flex items-center justify-between">
+                  <span>Swarna N.</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-bold">Top Tutor</span>
+                </p>
+                <p className="text-[10px] text-slate-500 truncate">VVCE • 9.6 CGPA</p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleRoleSwitch("student");
+                  setEmail("swasthik.s@vvce.ac.in");
+                  setPassword("DemoStudent@2025");
+                }}
+                className="p-2 rounded-xl bg-white border border-indigo-200 text-left hover:border-indigo-500 hover:shadow-sm transition-all cursor-pointer group"
+              >
+                <p className="text-[11px] font-bold text-slate-900 group-hover:text-indigo-600 flex items-center justify-between">
+                  <span>Swasthik S.</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 font-bold">AI / ML</span>
+                </p>
+                <p className="text-[10px] text-slate-500 truncate">VVCE • ML Squad</p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleRoleSwitch("admin");
+                  setEmail("demo-admin@vvce.ac.in");
+                  setPassword("DemoAdmin@2025");
+                }}
+                className="p-2 rounded-xl bg-white border border-purple-200 text-left hover:border-purple-500 hover:shadow-sm transition-all cursor-pointer group"
+              >
+                <p className="text-[11px] font-bold text-purple-950 group-hover:text-purple-700 flex items-center justify-between">
+                  <span>Prof. Anitha</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 font-bold">Admin</span>
+                </p>
+                <p className="text-[10px] text-purple-600 truncate">VVCE Faculty</p>
+              </button>
+            </div>
+          </div>
+
           {error && (
             <div className="mb-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5 animate-fadeIn">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />

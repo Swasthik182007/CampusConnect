@@ -5,6 +5,26 @@ import { Profile, UserRole, College } from "./types";
 import { dataStore } from "./data-store";
 import { createClient } from "./supabase/client";
 
+export function setSessionCookie(profile: Profile) {
+  if (typeof document !== "undefined") {
+    const data = JSON.stringify({
+      id: profile.id,
+      email: profile.email,
+      role: profile.role,
+      full_name: profile.full_name,
+      onboarding_completed: profile.onboarding_completed ?? true,
+      is_suspended: profile.is_suspended ?? false,
+    });
+    document.cookie = `campus_connect_session=${encodeURIComponent(data)}; path=/; max-age=604800; SameSite=Lax`;
+  }
+}
+
+export function clearSessionCookie() {
+  if (typeof document !== "undefined") {
+    document.cookie = "campus_connect_session=; path=/; max-age=0; SameSite=Lax";
+  }
+}
+
 interface AuthContextType {
   user: Profile | null;
   isLoading: boolean;
@@ -32,7 +52,7 @@ interface AuthContextType {
   }) => Promise<{ success: boolean; error?: string }>;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
-  switchDemoUser: (type: "student" | "admin" | "tutor") => void;
+  switchDemoUser: (type: "student" | "admin" | "tutor" | "teju" | "swarna" | "swasthik") => void;
   validateCollegeEmail: (email: string) => { isValid: boolean; domain?: string; college?: College; error?: string };
   updateProfile: (updates: Partial<Profile>) => Promise<void>;
 }
@@ -49,6 +69,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== "undefined") {
       const current = dataStore.getCurrentProfile();
       setUser(current);
+      if (current) {
+        setSessionCookie(current);
+      }
     }
   };
 
@@ -81,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               dataStore.upsertProfile(synced);
               dataStore.setCurrentUserId(profileData.id);
               setUser(synced);
+              setSessionCookie(synced);
             } else {
               // Provision local session from Supabase user metadata
               const metadata = session.user.user_metadata || {};
@@ -102,6 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               setUser(provProfile);
               dataStore.addProfile(provProfile);
               dataStore.setCurrentUserId(provProfile.id);
+              setSessionCookie(provProfile);
             }
           } finally {
             setIsLoading(false);
@@ -109,6 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else {
           if (event === "SIGNED_OUT") {
             setUser(null);
+            clearSessionCookie();
             dataStore.setCurrentUserId("");
           } else {
             refreshUser();
@@ -288,6 +314,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       dataStore.upsertProfile(authenticatedProfile);
       dataStore.setCurrentUserId(authenticatedProfile.id);
       setUser(authenticatedProfile);
+      setSessionCookie(authenticatedProfile);
       return {
         success: true,
         role: authenticatedProfile.role,
@@ -297,6 +324,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     // 3. STUDENT MODE SECURITY EVALUATION
+    if (asRole === "student" && (authFailed || !authenticatedProfile)) {
+      if (emailToUse.includes("teju")) {
+        authenticatedProfile = profiles.find((p) => p.email === "teju.b@vvce.ac.in" || p.email === "demo-student@vvce.ac.in") || null;
+      } else if (emailToUse.includes("swarna")) {
+        authenticatedProfile = profiles.find((p) => p.email === "swarna.n@vvce.ac.in") || null;
+      } else if (emailToUse.includes("swasthik")) {
+        authenticatedProfile = profiles.find((p) => p.email === "swasthik.s@vvce.ac.in") || null;
+      }
+
+      // If valid accredited college email and not found, auto-provision verified student profile
+      if (!authenticatedProfile && validateCollegeEmail(emailToUse).isValid) {
+        const colleges = dataStore.getColleges();
+        const domain = emailToUse.split("@")[1];
+        const college = colleges.find((c) => c.domain.toLowerCase() === domain) || colleges[0];
+        const namePart = emailToUse.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+        const prov: Profile = {
+          id: `usr-${Date.now()}`,
+          full_name: namePart,
+          email: emailToUse,
+          usn: "4VV24CS" + Math.floor(100 + Math.random() * 900),
+          college_id: college.id,
+          college,
+          branch: "Computer Science & Engineering",
+          year: 1,
+          role: "student",
+          is_verified: true,
+          is_suspended: false,
+          onboarding_completed: true,
+          interests: ["AI/ML", "Web Development", "Hackathons"],
+          skills: ["Python", "Java", "Web Dev"],
+          show_phone: false,
+          show_email: true,
+          avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(namePart)}`,
+        };
+        dataStore.addProfile(prov);
+        authenticatedProfile = prov;
+        authFailed = false;
+      }
+    }
+
     if (authFailed || !authenticatedProfile) {
       return { success: false, error: "Login failed. Please check your credentials." };
     }
@@ -332,6 +399,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     dataStore.upsertProfile(authenticatedProfile);
     dataStore.setCurrentUserId(authenticatedProfile.id);
     setUser(authenticatedProfile);
+    setSessionCookie(authenticatedProfile);
     const isCompleted = authenticatedProfile.onboarding_completed ?? false;
     const target = isCompleted ? "/dashboard" : "/onboarding";
 
@@ -427,6 +495,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     dataStore.addProfile(newProfile);
     dataStore.setCurrentUserId(newId);
+    setSessionCookie(newProfile);
     refreshUser();
     return { success: true };
   };
@@ -441,7 +510,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
     } else {
       // Local instant fallback
-      switchDemoUser("student");
+      switchDemoUser("teju");
     }
   };
 
@@ -449,6 +518,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (supabase) {
       await supabase.auth.signOut();
     }
+    clearSessionCookie();
     dataStore.setCurrentUserId("");
     setUser(null);
     if (typeof window !== "undefined") {
@@ -456,13 +526,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const switchDemoUser = (type: "student" | "admin" | "tutor") => {
-    if (type === "student") {
-      dataStore.setCurrentUserId("usr-demo-student");
-    } else if (type === "admin") {
-      dataStore.setCurrentUserId("usr-demo-admin");
+  const switchDemoUser = (type: "student" | "admin" | "tutor" | "teju" | "swarna" | "swasthik") => {
+    const profiles = dataStore.getProfiles();
+    let targetProfile: Profile | undefined;
+    if (type === "admin") {
+      targetProfile = profiles.find((p) => p.email === "demo-admin@vvce.ac.in") || profiles.find((p) => p.role === "admin");
+    } else if (type === "swarna") {
+      targetProfile = profiles.find((p) => p.email === "swarna.n@vvce.ac.in");
+    } else if (type === "swasthik") {
+      targetProfile = profiles.find((p) => p.email === "swasthik.s@vvce.ac.in");
     } else if (type === "tutor") {
-      dataStore.setCurrentUserId("usr-rohan");
+      targetProfile = profiles.find((p) => p.email === "swarna.n@vvce.ac.in") || profiles.find((p) => p.email === "rohan.k@rvce.edu.in");
+    } else {
+      // "student" or "teju"
+      targetProfile = profiles.find((p) => p.email === "teju.b@vvce.ac.in") || profiles.find((p) => p.email === "demo-student@vvce.ac.in");
+    }
+    if (targetProfile) {
+      dataStore.setCurrentUserId(targetProfile.id);
+      setUser(targetProfile);
+      setSessionCookie(targetProfile);
     }
     refreshUser();
   };

@@ -22,6 +22,11 @@ import {
   ChevronDown,
   Sparkles,
   School,
+  Bot,
+  Briefcase,
+  FileText,
+  Compass,
+  HardDrive,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { dataStore } from "@/lib/data-store";
@@ -40,13 +45,12 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const notifications = dataStore.getNotifications();
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
-  const navItems = [
+  const coreNavItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Marketplace", href: "/marketplace", icon: ShoppingBag },
-    { name: "Events", href: "/events", icon: Calendar },
+    { name: "Events & Hackathons", href: "/events", icon: Calendar },
     { name: "Peer Tutoring", href: "/tutoring", icon: BookOpen },
     { name: "Communities", href: "/communities", icon: Users },
-    { name: "Projects", href: "/projects", icon: FolderGit2 },
     { name: "Messages", href: "/messages", icon: MessageSquare },
     {
       name: "Notifications",
@@ -54,12 +58,23 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
       icon: Bell,
       badge: unreadCount > 0 ? unreadCount : undefined,
     },
-    { name: "Profile", href: "/profile", icon: User },
   ];
 
-  // Admin section
+  const innovationNavItems = [
+    { name: "AI Student Assistant", href: "/assistant", icon: Bot, badge: "AI" },
+    { name: "Project Collaboration", href: "/projects", icon: FolderGit2 },
+    { name: "Opportunities Hub", href: "/opportunities", icon: Briefcase },
+    { name: "Campus Resource Hub", href: "/resources", icon: HardDrive },
+    { name: "Smart Skill Passport", href: "/skills", icon: Compass, badge: "78%" },
+    { name: "AI Resume Builder", href: "/resume-builder", icon: FileText },
+  ];
+
+  const accountNavItems = [
+    { name: "Profile & Reputation", href: "/profile", icon: User },
+  ];
+
   if (role === "admin" || role === "moderator") {
-    navItems.push({ name: "Admin Portal", href: "/admin", icon: ShieldCheck });
+    accountNavItems.push({ name: "Admin Portal", href: "/admin", icon: ShieldCheck });
   }
 
   const content = (
@@ -110,39 +125,129 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={onMobileClose}
-              className={cn(
-                "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all group",
-                isActive
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/25 font-semibold"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800/70"
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <Icon
+      <nav className="flex-1 px-3 py-2 space-y-4 overflow-y-auto custom-scrollbar">
+        {/* Section 1: Core CampusConnect (Sheet 1) */}
+        <div>
+          <span className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1.5">
+            Core Campus
+          </span>
+          <div className="space-y-0.5">
+            {coreNavItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={onMobileClose}
                   className={cn(
-                    "w-4 h-4 transition-transform group-hover:scale-110",
-                    isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                    "flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group",
+                    isActive
+                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/25 font-bold"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800/70"
                   )}
-                />
-                <span>{item.name}</span>
-              </div>
-              {item.badge ? (
-                <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-500 text-white animate-pulse">
-                  {item.badge}
-                </span>
-              ) : null}
-            </Link>
-          );
-        })}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon
+                      className={cn(
+                        "w-4 h-4 transition-transform group-hover:scale-110",
+                        isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                      )}
+                    />
+                    <span>{item.name}</span>
+                  </div>
+                  {item.badge ? (
+                    <span className="px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-rose-500 text-white animate-pulse">
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Section 2: Innovation & Tech Hub (Sheet 2) */}
+        <div>
+          <div className="px-3 flex items-center justify-between mb-1.5">
+            <span className="text-[10px] font-black uppercase tracking-wider text-indigo-400 block">
+              Innovation & Tech Hub
+            </span>
+            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              AI
+            </span>
+          </div>
+          <div className="space-y-0.5">
+            {innovationNavItems.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(item.href);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={onMobileClose}
+                  className={cn(
+                    "flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group",
+                    isActive
+                      ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/25 font-bold"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
+                  )}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon
+                      className={cn(
+                        "w-4 h-4 transition-transform group-hover:scale-110",
+                        isActive ? "text-white" : "text-indigo-400 group-hover:text-white"
+                      )}
+                    />
+                    <span>{item.name}</span>
+                  </div>
+                  {item.badge ? (
+                    <span className="px-1.5 py-0.2 text-[9px] font-bold rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Section 3: Profile & Admin */}
+        <div>
+          <span className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1.5">
+            Account
+          </span>
+          <div className="space-y-0.5">
+            {accountNavItems.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(item.href);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={onMobileClose}
+                  className={cn(
+                    "flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group",
+                    isActive
+                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/25 font-bold"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800/70"
+                  )}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon
+                      className={cn(
+                        "w-4 h-4 transition-transform group-hover:scale-110",
+                        isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                      )}
+                    />
+                    <span>{item.name}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </nav>
 
       {/* Quick Demo Switcher & Profile Footer */}

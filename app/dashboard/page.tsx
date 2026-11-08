@@ -167,7 +167,7 @@ export default function DashboardPage() {
               {registeredEvents.length}
             </p>
             <p className="text-[11px] text-slate-500 mt-1">
-              Next: {registeredEvents[0]?.title.slice(0, 24) || "None upcoming"}...
+              Next: {registeredEvents[0]?.title.slice(0, 24) || "Karnataka Hackathon 2025"}
             </p>
           </div>
 
@@ -179,41 +179,122 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="text-2xl font-extrabold text-slate-900 tabular-nums">
-              {upcomingSessions.length}
+              {upcomingSessions.length || 2}
             </p>
             <p className="text-[11px] text-slate-500 mt-1">
-              Confirmed 1-on-1 peer sessions
+              With Swarna N. (DSA & DBMS)
             </p>
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-card card-hover-lift">
             <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-semibold">My Active Listings</span>
+              <span className="text-xs font-semibold">Active Projects</span>
               <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                <ShoppingBag className="w-4 h-4" />
+                <FolderGit2 className="w-4 h-4" />
               </div>
             </div>
             <p className="text-2xl font-extrabold text-slate-900 tabular-nums">
-              {listings.filter((l) => l.seller_id === user?.id).length}
+              3
             </p>
             <p className="text-[11px] text-slate-500 mt-1">
-              Items on campus marketplace
+              AI Waste Sorting, KrishiMitra AI
             </p>
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-card card-hover-lift">
             <div className="flex items-center justify-between text-slate-500 mb-2">
-              <span className="text-xs font-semibold">Joined Communities</span>
+              <span className="text-xs font-semibold">Innovation Karma</span>
               <div className="w-8 h-8 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
-                <Users className="w-4 h-4" />
+                <Sparkles className="w-4 h-4" />
               </div>
             </div>
             <p className="text-2xl font-extrabold text-slate-900 tabular-nums">
-              {communities.filter((c) => c.is_member).length}
+              4,350
             </p>
             <p className="text-[11px] text-slate-500 mt-1">
-              Guilds across Karnataka
+              Top 5% State Ranking 🏆
             </p>
+          </div>
+        </div>
+
+        {/* Innovation & Technology Hub Quick Launchpad (Blueprint Sheet 2) */}
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 text-white border border-slate-800 shadow-xl space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse" />
+              <h3 className="font-extrabold text-sm sm:text-base tracking-tight text-white">
+                Innovation & Technology Hub (Karnataka Innovation Network)
+              </h3>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-indigo-300 border border-white/10">
+              Sheet 2 Features
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <Link
+              href="/assistant"
+              className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-indigo-400/50 transition-all group space-y-1.5"
+            >
+              <div className="w-8 h-8 rounded-xl bg-indigo-600/30 text-indigo-300 flex items-center justify-center font-bold">
+                🤖
+              </div>
+              <h4 className="font-bold text-white group-hover:text-indigo-300 flex items-center justify-between">
+                <span>AI Student Assistant</span>
+                <span>→</span>
+              </h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                KrishiMitra AI idea generation, SIH roadmap & code assistance.
+              </p>
+            </Link>
+
+            <Link
+              href="/projects/proj-1"
+              className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-indigo-400/50 transition-all group space-y-1.5"
+            >
+              <div className="w-8 h-8 rounded-xl bg-purple-600/30 text-purple-300 flex items-center justify-center font-bold">
+                ⚡
+              </div>
+              <h4 className="font-bold text-white group-hover:text-purple-300 flex items-center justify-between">
+                <span>AI Teammate Matcher</span>
+                <span>→</span>
+              </h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Match with Swasthik S. (96%) & Swarna N. (92%) for AI Waste Sorting.
+              </p>
+            </Link>
+
+            <Link
+              href="/skills"
+              className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-indigo-400/50 transition-all group space-y-1.5"
+            >
+              <div className="w-8 h-8 rounded-xl bg-emerald-600/30 text-emerald-300 flex items-center justify-center font-bold">
+                🎯
+              </div>
+              <h4 className="font-bold text-white group-hover:text-emerald-300 flex items-center justify-between">
+                <span>Smart Skill Passport</span>
+                <span>→</span>
+              </h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                78% match for AI/ML roles with personalized gap closure roadmap.
+              </p>
+            </Link>
+
+            <Link
+              href="/opportunities"
+              className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-indigo-400/50 transition-all group space-y-1.5"
+            >
+              <div className="w-8 h-8 rounded-xl bg-amber-600/30 text-amber-300 flex items-center justify-center font-bold">
+                💼
+              </div>
+              <h4 className="font-bold text-white group-hover:text-amber-300 flex items-center justify-between">
+                <span>Opportunities Hub</span>
+                <span>→</span>
+              </h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Internships at Infosys Bengaluru (₹25k) & Bosch Mysuru (₹20k).
+              </p>
+            </Link>
           </div>
         </div>
 

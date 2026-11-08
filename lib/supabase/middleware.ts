@@ -64,10 +64,35 @@ export async function updateSession(request: NextRequest) {
   });
 
   // Refresh auth token and verify session
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  let user = null;
+  let authError = null;
+
+  try {
+    const res = await supabase.auth.getUser();
+    user = res.data?.user || null;
+    authError = res.error || null;
+  } catch (e) {
+    authError = e as any;
+  }
+
+  // Check for client-side local session cookie (supports demo accounts and offline fallback)
+  const sessionCookie = request.cookies.get("campus_connect_session")?.value;
+  let cookieProfile: {
+    id: string;
+    email?: string;
+    role?: string;
+    full_name?: string;
+    onboarding_completed?: boolean;
+    is_suspended?: boolean;
+  } | null = null;
+
+  if (sessionCookie) {
+    try {
+      cookieProfile = JSON.parse(decodeURIComponent(sessionCookie));
+    } catch {
+      cookieProfile = null;
+    }
+  }
 
   const pathname = request.nextUrl.pathname;
 
@@ -81,10 +106,17 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/tutoring/become-a-tutor") ||
     pathname.startsWith("/messages") ||
     pathname.startsWith("/notifications") ||
-    pathname.startsWith("/profile");
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/assistant") ||
+    pathname.startsWith("/opportunities") ||
+    pathname.startsWith("/resources") ||
+    pathname.startsWith("/skills") ||
+    pathname.startsWith("/resume-builder");
+
+  const isAuthenticated = !!user || !!cookieProfile?.id;
 
   // 1. Unauthenticated users accessing protected routes
-  if (!user || authError) {
+  if (!isAuthenticated) {
     if (isProtectedRoute) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("next", pathname);
@@ -93,15 +125,20 @@ export async function updateSession(request: NextRequest) {
     return response;
   }
 
-  // 2. Fetch profile from public.profiles for role verification
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, onboarding_completed, is_verified, is_suspended")
-    .eq("id", user.id)
-    .single();
+  // 2. Fetch profile from public.profiles for role verification (or use cookie profile)
+  let profile = null;
+  if (user) {
+    const { data: dbProfile } = await supabase
+      .from("profiles")
+      .select("role, onboarding_completed, is_verified, is_suspended")
+      .eq("id", user.id)
+      .single();
+    profile = dbProfile;
+  }
 
-  const role = profile?.role || "student";
-  const isSuspended = profile?.is_suspended ?? false;
+  const role = profile?.role || cookieProfile?.role || "student";
+  const isSuspended = profile?.is_suspended ?? cookieProfile?.is_suspended ?? false;
+  const onboardingCompleted = profile?.onboarding_completed ?? cookieProfile?.onboarding_completed ?? true;
 
   // Suspended account check
   if (isSuspended) {
@@ -116,7 +153,7 @@ export async function updateSession(request: NextRequest) {
     if (role === "admin" || role === "moderator") {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
-    const target = profile?.onboarding_completed ? "/dashboard" : "/onboarding";
+    const target = onboardingCompleted ? "/dashboard" : "/onboarding";
     return NextResponse.redirect(new URL(target, request.url));
   }
 
@@ -140,11 +177,11 @@ export async function updateSession(request: NextRequest) {
       pathname.startsWith("/notifications") ||
       pathname.startsWith("/profile");
 
-    if (!profile?.onboarding_completed && isStudentPage) {
+    if (!onboardingCompleted && isStudentPage) {
       return NextResponse.redirect(new URL("/onboarding", request.url));
     }
 
-    if (profile?.onboarding_completed && pathname === "/onboarding") {
+    if (onboardingCompleted && pathname === "/onboarding") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }

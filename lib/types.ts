@@ -304,7 +304,7 @@ export interface Report {
   id: string;
   reporter_id: string;
   reporter?: Profile;
-  target_type: "listing" | "user" | "message" | "post" | "community";
+  target_type: "listing" | "user" | "message" | "post" | "community" | "project";
   target_id: string;
   target_title?: string;
   reason: string;
